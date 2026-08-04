@@ -5,10 +5,10 @@
 
 
 > **"제휴의 시작부터 끝까지, A:SSU에서 한 번에!"**  
-> 🏆 **제5회 숭실대학교 IT 프로젝트 공모전 수상작**
+> 🏆 **제5회 숭실대학교 IT 프로젝트 공모전 수상작**  
 > 🏆 **2026 숭실대학교 컴퓨터학부 소프트웨어공모전 총장상**
 
-[📱 Google Play Store](#) | [💻 GitHub Repository](#) | [📄 API 명세서 (Swagger)](#)
+[📱 Google Play Store](https://play.google.com/store/apps/details?id=com.ssu.assu))
 
 ---
 
@@ -16,10 +16,10 @@
 1. [프로젝트 개요](#-프로젝트-개요)
 2. [팀원 소개](#-팀원-소개)
 3. [주요 기능](#-주요-기능)
-4. [기술 스택](#-기술-스택)
+4. [백엔드 기술 스택](#-기술-스택)
 5. [시스템 아키텍처](#-시스템-아키텍처)
-6. [배포](#-배포)
-7. [프로젝트 구조](#-프로젝트-구조)
+6. [백엔드 프로젝트 구조](#-백엔드-프로젝트-구조)
+7. [백엔드 배포](#-백엔드-배포)
 8. [문의](#-문의)
 
 ---
@@ -74,7 +74,7 @@
 
 ---
 
-## 🛠 기술 스택
+## 🛠 백엔드 기술 스택
 
 | 항목 | 사용 기술 / 라이브러리 |
 | :--- | :--- |
@@ -84,7 +84,7 @@
 | **Messaging** | RabbitMQ, Firebase Cloud Messaging (FCM) |
 | **Storage & Real-time** | AWS S3, WebSocket, STOMP |
 | **API Docs & Build** | SpringDoc OpenAPI (Swagger), Gradle |
-
+| **Infra** | AWS EC2, AWS RDS, k3s, ArgoCD, Docker |
 
 ## 🏗 시스템 아키텍처
 
@@ -122,7 +122,7 @@
     │  └─────────────┘  └─────────────┘  └─────────────┘      │
     └─────────────────────────────────────────────────────────┘
 ```
-## 📁 프로젝트 구조
+## 📁 백엔드 프로젝트 구조
 ```text
 src/main/java/com/assu/server/
 ├── domain/                     # 도메인별 비즈니스 로직
@@ -168,9 +168,9 @@ domain/example/
 ├── converter/                  # DTO-Entity 변환
 └── exception/                  # 도메인별 예외
 ```
-## 🚢 배포
+## 🚢 백엔드 배포
 ### CI/CD 파이프라인
-프로젝트는 GitHub Actions를 사용한 자동화된 CI/CD 파이프라인을 구축하고 있습니다.
+백엔드 프로젝트는 ArgoCD 기반 자동화된 CI/CD 파이프라인을 구축하고 있습니다.
 
 ### CI (Continuous Integration)
 트리거: develop 브랜치에 Push 또는 PR
