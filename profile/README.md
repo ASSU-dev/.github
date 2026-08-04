@@ -16,11 +16,9 @@
 1. [프로젝트 개요](#-프로젝트-개요)
 2. [팀원 소개](#-팀원-소개)
 3. [주요 기능](#-주요-기능)
-4. [백엔드 기술 스택](#-기술-스택)
+4. [백엔드](#-백엔드)
 5. [시스템 아키텍처](#-시스템-아키텍처)
-6. [백엔드 프로젝트 구조](#-백엔드-프로젝트-구조)
-7. [백엔드 배포](#-백엔드-배포)
-8. [문의](#-문의)
+6. [문의](#-문의)
 
 ---
 
@@ -74,7 +72,9 @@
 
 ---
 
-## 🛠 백엔드 기술 스택
+## 백엔드
+
+### 🛠 기술 스택
 
 | 항목 | 사용 기술 / 라이브러리 |
 | :--- | :--- |
@@ -86,7 +86,67 @@
 | **API Docs & Build** | SpringDoc OpenAPI (Swagger), Gradle |
 | **Infra** | AWS EC2, AWS RDS, k3s, ArgoCD, Docker |
 
-## 🏗 시스템 아키텍처
+### 📁 백엔드 프로젝트 구조
+```text
+src/main/java/com/assu/server/
+├── domain/                     # 도메인별 비즈니스 로직
+│   ├── admin/                  # 관리자 관리
+│   ├── auth/                   # 인증 및 권한
+│   ├── certification/          # 인증서 관리
+│   ├── chat/                   # 실시간 채팅
+│   ├── common/                 # 공통 엔티티
+│   ├── deviceToken/            # 디바이스 토큰 관리
+│   ├── inquiry/                # 문의 관리
+│   ├── map/                    # 지도 서비스
+│   ├── mapping/                # 학생-관리자 매핑
+│   ├── member/                 # 회원 관리
+│   ├── notification/           # 알림 시스템
+│   ├── partner/                # 파트너 관리
+│   ├── partnership/            # 파트너십 관리
+│   ├── report/                 # 신고 처리
+│   ├── review/                 # 리뷰 시스템
+│   ├── store/                  # 매장 관리
+│   ├── suggestion/             # 건의사항
+│   ├── term/                   # 약관 관리
+│   └── user/                   # 사용자 관리
+├── global/                     # 전역 설정 및 유틸리티
+│   ├── apiPayload/             # API 응답 형식
+│   ├── config/                 # 설정 클래스
+│   ├── exception/              # 예외 처리
+│   └── util/                   # 유틸리티 클래스
+├── infra/                      # 외부 서비스 연동
+│   ├── aligo/                  # SMS 서비스
+│   ├── firebase/               # FCM 푸시 알림
+│   └── s3/                     # AWS S3 연동
+└── ServerApplication.java      # 메인 애플리케이션
+```
+#### 도메인별 구조
+각 도메인은 다음과 같은 계층 구조를 따릅니다:
+```text
+domain/example/
+├── controller/                 # REST API 컨트롤러
+├── service/                    # 비즈니스 로직
+├── repository/                 # 데이터 액세스
+├── entity/                     # JPA 엔티티
+├── dto/                        # 데이터 전송 객체
+├── converter/                  # DTO-Entity 변환
+└── exception/                  # 도메인별 예외
+```
+### 🚢 백엔드 배포
+#### CI/CD 파이프라인
+백엔드 프로젝트는 ArgoCD와 Docker 기반 자동화된 CI/CD 파이프라인을 구축하고 있습니다.
+
+#### CI (Continuous Integration)
+트리거: develop 브랜치에 Push 또는 PR
+과정: 코드 빌드 → 테스트 실행 → 정적 분석
+#### CD (Continuous Deployment)
+트리거: main 브랜치에 Push
+개발환경 배포 과정: Docker 이미지 빌드 → DockerHub 푸시 → EC2 배포
+운영환경 배포 과정: ArgoCD 기반 pull 배포
+#### Blue-Green 배포
+개발환경에서는 무중단 배포를 위해 스크립트 기반 Blue-Green 배포 전략을 사용합니다.
+
+### 🏗 시스템 아키텍처
 
 ```text
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -122,66 +182,6 @@
     │  └─────────────┘  └─────────────┘  └─────────────┘      │
     └─────────────────────────────────────────────────────────┘
 ```
-## 📁 백엔드 프로젝트 구조
-```text
-src/main/java/com/assu/server/
-├── domain/                     # 도메인별 비즈니스 로직
-│   ├── admin/                  # 관리자 관리
-│   ├── auth/                   # 인증 및 권한
-│   ├── certification/          # 인증서 관리
-│   ├── chat/                   # 실시간 채팅
-│   ├── common/                 # 공통 엔티티
-│   ├── deviceToken/            # 디바이스 토큰 관리
-│   ├── inquiry/                # 문의 관리
-│   ├── map/                    # 지도 서비스
-│   ├── mapping/                # 학생-관리자 매핑
-│   ├── member/                 # 회원 관리
-│   ├── notification/           # 알림 시스템
-│   ├── partner/                # 파트너 관리
-│   ├── partnership/            # 파트너십 관리
-│   ├── report/                 # 신고 처리
-│   ├── review/                 # 리뷰 시스템
-│   ├── store/                  # 매장 관리
-│   ├── suggestion/             # 건의사항
-│   ├── term/                   # 약관 관리
-│   └── user/                   # 사용자 관리
-├── global/                     # 전역 설정 및 유틸리티
-│   ├── apiPayload/             # API 응답 형식
-│   ├── config/                 # 설정 클래스
-│   ├── exception/              # 예외 처리
-│   └── util/                   # 유틸리티 클래스
-├── infra/                      # 외부 서비스 연동
-│   ├── aligo/                  # SMS 서비스
-│   ├── firebase/               # FCM 푸시 알림
-│   └── s3/                     # AWS S3 연동
-└── ServerApplication.java      # 메인 애플리케이션
-```
-## 도메인별 구조
-각 도메인은 다음과 같은 계층 구조를 따릅니다:
-```text
-domain/example/
-├── controller/                 # REST API 컨트롤러
-├── service/                    # 비즈니스 로직
-├── repository/                 # 데이터 액세스
-├── entity/                     # JPA 엔티티
-├── dto/                        # 데이터 전송 객체
-├── converter/                  # DTO-Entity 변환
-└── exception/                  # 도메인별 예외
-```
-## 🚢 백엔드 배포
-### CI/CD 파이프라인
-백엔드 프로젝트는 ArgoCD 기반 자동화된 CI/CD 파이프라인을 구축하고 있습니다.
-
-### CI (Continuous Integration)
-트리거: develop 브랜치에 Push 또는 PR
-과정: 코드 빌드 → 테스트 실행 → 정적 분석
-### CD (Continuous Deployment)
-트리거: main 브랜치에 Push
-과정: Docker 이미지 빌드 → DockerHub 푸시 → EC2 배포
-### Blue-Green 배포
-무중단 배포를 위해 Blue-Green 배포 전략을 사용합니다.
-
-
 
 ## 📞 문의
 프로젝트에 대한 문의사항이 있으시면 다음을 통해 연락해 주세요:
